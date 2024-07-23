@@ -71,7 +71,9 @@ defmodule ExAwsMskIamAuth do
 
       case @kpro_lib.find(:error_code, server_final_msg) do
         :no_error -> :ok
-        other -> {:error, other}
+        other ->
+          Logger.error("SASL failed #{other}")
+          {:error, other}
       end
     else
       error ->
