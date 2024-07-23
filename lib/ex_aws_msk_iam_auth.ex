@@ -87,7 +87,7 @@ defmodule ExAwsMskIamAuth do
   end
 
   defp send_recv(sock, mod, client_id, timeout, payload) do
-    req = @kpro_lib.make(:sasl_authenticate, _auth_req_vsn = 0, [{:auth_bytes, payload}])
+    req = @kpro_lib.make(:sasl_authenticate, _auth_req_vsn = 1, [{:auth_bytes, payload}])
     rsp = @kpro_lib.send_and_recv(req, sock, mod, client_id, timeout)
 
     Logger.debug("Final Auth Response from server - #{inspect(rsp)}")
