@@ -72,7 +72,8 @@ defmodule ExAwsMskIamAuth do
       case @kpro_lib.find(:error_code, server_final_msg) do
         :no_error -> :ok
         other ->
-          Logger.error("SASL failed #{other}")
+          message = @kpro_lib.find(:error_message, server_final_msg)
+          Logger.error("SASL failed #{other}: #{message}")
           {:error, other}
       end
     else
@@ -87,7 +88,7 @@ defmodule ExAwsMskIamAuth do
   end
 
   defp send_recv(sock, mod, client_id, timeout, payload) do
-    req = @kpro_lib.make(:sasl_authenticate, _auth_req_vsn = 1, [{:auth_bytes, payload}])
+    req = @kpro_lib.make(:sasl_authenticate, _auth_req_vsn = 0, [{:auth_bytes, payload}])
     rsp = @kpro_lib.send_and_recv(req, sock, mod, client_id, timeout)
 
     Logger.debug("Final Auth Response from server - #{inspect(rsp)}")
